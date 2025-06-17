@@ -5,6 +5,7 @@ default:
 	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c rmd160/rmd160.c -o rmd160.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c sha3/sha3.c -o sha3.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c sha3/keccak.c -o keccak.o
+	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c hashing.c -o hashing.o
 	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c xxhash/xxhash.c -o xxhash.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c util.c -o util.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c secp256k1/Int.cpp -o Int.o
@@ -17,10 +18,10 @@ default:
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -o hash/sha256.o -ftree-vectorize -flto -c hash/sha256.cpp
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -o hash/ripemd160_sse.o -ftree-vectorize -flto -c hash/ripemd160_sse.cpp
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -o hash/sha256_sse.o -ftree-vectorize -flto -c hash/sha256_sse.cpp
-	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -o keyhunt keyhunt.cpp base58.o rmd160.o hash/ripemd160.o hash/ripemd160_sse.o hash/sha256.o hash/sha256_sse.o bloom.o oldbloom.o xxhash.o util.o Int.o  Point.o SECP256K1.o  IntMod.o  Random.o IntGroup.o sha3.o keccak.o  -lm -lpthread
+	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -o keyhunt keyhunt.cpp base58.o rmd160.o hash/ripemd160.o hash/ripemd160_sse.o hash/sha256.o hash/sha256_sse.o hashing.o bloom.o oldbloom.o xxhash.o util.o Int.o  Point.o SECP256K1.o  IntMod.o  Random.o IntGroup.o sha3.o keccak.o  -lm -lpthread -lcrypto
 	rm -r *.o
 clean:
-	rm keyhunt
+	rm -f keyhunt
 legacy:
 	g++ -march=native -mtune=native -Wall -Wextra -O3 -ftree-vectorize -flto -c oldbloom/bloom.cpp -o oldbloom.o
 	g++ -march=native -mtune=native -Wall -Wextra -O3 -ftree-vectorize -flto -c bloom/bloom.cpp -o bloom.o

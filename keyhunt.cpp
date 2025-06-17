@@ -502,7 +502,7 @@ int main(int argc, char **argv)	{
 	
 	printf("[+] Version %s, developed by AlbertoBSD\n",version);
 
-    while ((c = getopt(argc, argv, "deh6MqRSB:b:c:C:E:f:I:k:l:m:N:n:p:r:s:t:v:G:8:z:j")) != -1) {
+	while ((c = getopt(argc, argv, "deh6MqRSB:b:c:C:E:f:I:k:l:m:N:n:p:r:s:t:v:G:8:z:")) != -1) {
 		switch(c) {
 			case 'h':
 				menu();
@@ -560,12 +560,11 @@ int main(int argc, char **argv)	{
 						FLAGCRYPTO = CRYPTO_NONE;
 						fprintf(stderr,"[E] Unknow crypto value %s\n",optarg);
 						exit(EXIT_FAILURE);
-                        break;
-                        case 'd':
-                                FLAGDEBUG = 1;
-                                if(RMD160_BSGS_BITS > 63) RMD160_BSGS_BITS = 63;
-                                printf("[+] Flag DEBUG enabled\n");
-                        break;
+					break;
+				}
+			break;
+			case 'C':
+				if(strlen(optarg) == 22)	{
 					FLAGBASEMINIKEY = 1;
 					str_baseminikey = (char*) malloc(23);
 					checkpointer((void *)str_baseminikey,__FILE__,"malloc","str_baseminikey" ,__LINE__ - 1);
@@ -589,8 +588,8 @@ int main(int argc, char **argv)	{
 				}
 				
 			break;
-                                        if(RMD160_BSGS_BITS > 63) RMD160_BSGS_BITS = 63;
-                                        }
+			case 'd':
+				FLAGDEBUG = 1;
 				printf("[+] Flag DEBUG enabled\n");
 			break;
 			case 'e':
@@ -605,28 +604,17 @@ int main(int argc, char **argv)	{
 				FLAGFILE = 1;
 				fileName = optarg;
 			break;
-                        case 'I':
-                                FLAGSTRIDE = 1;
-                                str_stride = optarg;
-                        break;
-                        case 'j':
-                                FLAGMODE = MODE_RMD160_BSGS;
-                                printf("[+] Mode rmd160-bsgs\n");
-                        break;
-                        case 'k':
-                                if(FLAGMODE == MODE_RMD160_BSGS){
-                                        RMD160_BSGS_BITS = strtoul(optarg,NULL,10);
-                                        if(RMD160_BSGS_BITS > 31) RMD160_BSGS_BITS = 31;
-                                        RMD160_BSGS_TABLE_SIZE = 1ULL << RMD160_BSGS_BITS;
-                                        printf("[+] Table size 2^%u entries\n",RMD160_BSGS_BITS);
-                                }else{
-                                        KFACTOR = (int)strtol(optarg,NULL,10);
-                                        if(KFACTOR <= 0){
-                                                KFACTOR = 1;
-                                        }
-                                        printf("[+] K factor %i\n",KFACTOR);
-                                }
-                        break;
+			case 'I':
+				FLAGSTRIDE = 1;
+				str_stride = optarg;
+			break;
+			case 'k':
+				KFACTOR = (int)strtol(optarg,NULL,10);
+				if(KFACTOR <= 0)	{
+					KFACTOR = 1;
+				}
+				printf("[+] K factor %i\n",KFACTOR);
+			break;
 
 			case 'l':
 				switch(indexOf(optarg,publicsearch,3)) {
@@ -649,7 +637,7 @@ int main(int argc, char **argv)	{
 				printf("[+] Matrix screen\n");
 			break;
 			case 'm':
-                                switch(indexOf(optarg,modes,8)) {
+				switch(indexOf(optarg,modes,7)) {
 					case MODE_XPOINT: //xpoint
 						FLAGMODE = MODE_XPOINT;
 						printf("[+] Mode xpoint\n");
@@ -669,29 +657,24 @@ int main(int argc, char **argv)	{
 					break;
 					case MODE_PUB2RMD:
 						FLAGMODE = MODE_PUB2RMD;
-						printf("[+] Mode pub2rmd was removed\n");
-						exit(0);
+						printf("[+] Mode pub2rmd\n");
 					break;
 					case MODE_MINIKEYS:
 						FLAGMODE = MODE_MINIKEYS;
 						printf("[+] Mode minikeys\n");
 					break;
-                                       case MODE_VANITY:
-                                               FLAGMODE = MODE_VANITY;
-                                               printf("[+] Mode vanity\n");
-                                               if(vanity_bloom == NULL){
-                                                       vanity_bloom = (struct bloom*) calloc(1,sizeof(struct bloom));
-                                                       checkpointer((void *)vanity_bloom,__FILE__,"calloc","vanity_bloom" ,__LINE__ -1);
-                                               }
-                                       break;
-                                       case MODE_RMD160_BSGS:
-                                                FLAGMODE = MODE_RMD160_BSGS;
-                                                printf("[+] Mode rmd160-bsgs\n");
-                                       break;
-                                       default:
-                                               fprintf(stderr,"[E] Unknow mode value %s\n",optarg);
-                                               exit(EXIT_FAILURE);
-                                       break;
+					case MODE_VANITY:
+						FLAGMODE = MODE_VANITY;
+						printf("[+] Mode vanity\n");
+						if(vanity_bloom == NULL){
+							vanity_bloom = (struct bloom*) calloc(1,sizeof(struct bloom));
+							checkpointer((void *)vanity_bloom,__FILE__,"calloc","vanity_bloom" ,__LINE__ -1);
+						}
+					break;
+					default:
+						fprintf(stderr,"[E] Unknow mode value %s\n",optarg);
+						exit(EXIT_FAILURE);
+					break;
 				}
 			break;
 			case 'n':
@@ -805,6 +788,9 @@ int main(int argc, char **argv)	{
 			default:
 				fprintf(stderr,"[E] Unknow opcion -%c\n",c);
 				exit(EXIT_FAILURE);
+			break;
+		}
+	}
 			break;
 		}
 	}
