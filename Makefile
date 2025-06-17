@@ -5,7 +5,7 @@ default:
 	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c rmd160/rmd160.c -o rmd160.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c sha3/sha3.c -o sha3.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c sha3/keccak.c -o keccak.o
-gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c hashing.c -o hashing.o
+	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c hashing.c -o hashing.o
 	gcc -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -O3 -ftree-vectorize -c xxhash/xxhash.c -o xxhash.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c util.c -o util.o
 	g++ -m64 -march=native -mtune=native -mavx2 -fopenmp -Wall -Wextra -Wno-deprecated-copy -O3 -ftree-vectorize -c secp256k1/Int.cpp -o Int.o
